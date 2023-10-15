@@ -1,0 +1,8 @@
+Install all dependencies by using npm init
+Make sure node_modules folder is available
+
+for running this TODO project
+
+use -> 
+1) node index.js
+2) nodemon.inedx.js

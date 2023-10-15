@@ -62,6 +62,11 @@ input:checked + p {
     text-decoration-color: #a683e3;
 }
 
+input:checked + form p {
+    text-decoration: line-through;
+    text-decoration-color: #a683e3;
+}
+
 input[type="checkbox"] {
     margin: 20px;
 }
@@ -69,6 +74,14 @@ input[type="checkbox"] {
 p {
     margin: 0;
     width: 75%;
+    text-align: left;
+    font-size: 20px;
+    font-weight: 200;
+    color: #00204a;
+}
+.daily-update p {
+    margin: 0;
+    width: fit-content;
     text-align: left;
     font-size: 20px;
     font-weight: 200;
@@ -115,8 +128,10 @@ footer{
     color: rgba(0, 0, 0, 0.5);
 }
 
-.delete button{
+.delete button, .update button{
     border: none;
     background: white;
+    cursor: pointer;
 }
+
 

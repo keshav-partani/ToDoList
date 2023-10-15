@@ -5,10 +5,17 @@ import mongoose from "mongoose";
 
 const app = express();
 const port = 3000;
+const mongoURL = "mongodb://127.0.0.1:27017/todolistDB";
 
-mongoose.connect("mongodb://127.0.0.1:27017/todolistDB");
+// Connection with mongodb localhost
+mongoose.connect(mongoURL);
+
+app.use(express.static("public"));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 const {Schema} = mongoose;
+
+// Daily Work Schema, Model, Item
 const dailyWork = new Schema({
     title: {
         type: String,
@@ -23,6 +30,15 @@ const dailyWork = new Schema({
         require: true
     }
 })
+const DailyToDo = mongoose.model('dailyWork', dailyWork); 
+const w1 = new DailyToDo({
+    title: "New Day New Work",
+    isComplete: false,
+    date: moment().toDate()
+})
+const dailyItem = [w1];
+
+// Work Goal Schema, Model, Item
 const WorkGoal = new Schema({
     title: {
         type: String,
@@ -33,41 +49,15 @@ const WorkGoal = new Schema({
         require: true
     },
 })
-
-const DailyToDo = mongoose.model('dailyWork', dailyWork); 
 const WorkToDo = mongoose.model('WorkGoal', WorkGoal); 
-
-const w1 = new DailyToDo({
-    title: "Insert your work",
-    isComplete: false,
-    date: moment().toDate()
-})
-
-const dailyItem = [w1];
-
 const wt1 = new WorkToDo({
     title: "Insert your work",
     isComplete: false
 })
-
 const workItem = [wt1];
 
-app.use(express.static("public"));
-app.use(bodyParser.urlencoded({ extended: true }));
 
-async function notes(){
-    let myNotes = await DailyToDo.find({});
-    for (let index = 0; index < myNotes.length; index++) {
-        const element = myNotes[index];
-        if(element.date.getDate() === moment().toDate().getDate()){
-            //as it is no change
-        }else{
-            await DailyToDo.findByIdAndDelete(element._id)
-        }
-    }
-    myNotes = await DailyToDo.find({});
-    return myNotes
-}
+// Daily notes routes points like home, new add, complete work or not(check), delete Work,  delete Automatically (if new date comes)
 
 app.get('/', async(req, res)=>{
     let myNotes = await notes();
@@ -107,12 +97,29 @@ app.post('/dailyChecked', async (req,res)=>{
     res.redirect('/')
 })
 
-app.post('/deleteitem', async (req, res)=>{
+async function notes(){
+    let myNotes = await DailyToDo.find({});
+    for (let index = 0; index < myNotes.length; index++) {
+        const element = myNotes[index];
+        if(element.date.getDate() === moment().toDate().getDate()){
+            //as it is no change
+        }else{
+            await DailyToDo.findByIdAndDelete(element._id)
+        }
+    }
+    myNotes = await DailyToDo.find({});
+    return myNotes
+}
+
+
+app.post('/deleteDailyitem', async (req, res)=>{
     const item_id = req.body.delete;
-    await WorkToDo.findByIdAndDelete(item_id)
-    res.redirect('/work')
+    await DailyToDo.findByIdAndDelete(item_id)
+    res.redirect('/')
 })
 
+
+// Work Goals routes points like home, new add, complete work or not(check), delete Work
 app.get("/work", async (req,res)=> {
     let myNotes = await WorkToDo.find({});
     if(myNotes.length === 0){
@@ -150,6 +157,14 @@ app.post('/workChecked', async (req,res)=>{
     }
     res.redirect('/work')
 })
+
+app.post('/deleteitem', async (req, res)=>{
+    const item_id = req.body.delete;
+    await WorkToDo.findByIdAndDelete(item_id)
+    res.redirect('/work')
+})
+
+//port listening
 
 app.listen(port, () => {
     console.log(`Server running on port: http://localhost:${port}`);
