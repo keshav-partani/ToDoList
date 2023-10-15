@@ -18,10 +18,10 @@ const dailyWork = new Schema({
         type: Boolean,
         require: true
     },
-    // date:{
-    //     type: date,
-    //     require: true
-    // }
+    date:{
+        type: Date,
+        require: true
+    }
 })
 const WorkGoal = new Schema({
     title: {
@@ -39,8 +39,8 @@ const WorkToDo = mongoose.model('WorkGoal', WorkGoal);
 
 const w1 = new DailyToDo({
     title: "Insert your work",
-    isComplete: false
-    // date: moment
+    isComplete: false,
+    date: moment().toDate()
 })
 
 const dailyItem = [w1];
@@ -48,7 +48,6 @@ const dailyItem = [w1];
 const wt1 = new WorkToDo({
     title: "Insert your work",
     isComplete: false
-    // date: moment
 })
 
 const workItem = [wt1];
@@ -56,13 +55,26 @@ const workItem = [wt1];
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get('/', async(req, res)=>{
+async function notes(){
     let myNotes = await DailyToDo.find({});
+    for (let index = 0; index < myNotes.length; index++) {
+        const element = myNotes[index];
+        if(element.date.getDate() === moment().toDate().getDate()){
+            //as it is no change
+        }else{
+            await DailyToDo.findByIdAndDelete(element._id)
+        }
+    }
+    myNotes = await DailyToDo.find({});
+    return myNotes
+}
+
+app.get('/', async(req, res)=>{
+    let myNotes = await notes();
     if(myNotes.length === 0){
         await DailyToDo.insertMany(dailyItem) 
-        myNotes = await DailyToDo.find({});
+        myNotes = await notes();
     }
-    // console.log(myNotes)
     try {
         res.render("daily.ejs", {moment: moment, data: myNotes});
     } catch (error) {
@@ -77,14 +89,13 @@ app.post('/', async (req,res)=>{
         res.redirect("/")
     }
     else{
-        const w1 = new DailyToDo({title: todo, isComplete: false})
+        const w1 = new DailyToDo({title: todo, isComplete: false, date: moment().toDate()})
         await w1.save();
         res.redirect("/")
     }
 });
 
 app.post('/dailyChecked', async (req,res)=>{
-    console.log(req.body.checkbox)
     if(req.body.checkbox.length === 2){
         let id = req.body.checkbox[0];
         let id_data = await DailyToDo.find({_id: id}).exec();
@@ -98,9 +109,7 @@ app.post('/dailyChecked', async (req,res)=>{
 
 app.post('/deleteitem', async (req, res)=>{
     const item_id = req.body.delete;
-    console.log(item_id)
     await WorkToDo.findByIdAndDelete(item_id)
-    console.log("work is done")
     res.redirect('/work')
 })
 
@@ -131,7 +140,6 @@ app.post('/work', async (req,res)=>{
 });
 
 app.post('/workChecked', async (req,res)=>{
-    console.log(req.body.checkbox)
     if(req.body.checkbox.length === 2){
         let id = req.body.checkbox[0];
         let id_data = await WorkToDo.find({_id: id}).exec();
