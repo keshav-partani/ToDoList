@@ -96,6 +96,14 @@ app.post('/dailyChecked', async (req,res)=>{
     res.redirect('/')
 })
 
+app.post('/deleteitem', async (req, res)=>{
+    const item_id = req.body.delete;
+    console.log(item_id)
+    await WorkToDo.findByIdAndDelete(item_id)
+    console.log("work is done")
+    res.redirect('/work')
+})
+
 app.get("/work", async (req,res)=> {
     let myNotes = await WorkToDo.find({});
     if(myNotes.length === 0){

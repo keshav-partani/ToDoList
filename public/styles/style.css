@@ -68,6 +68,8 @@ input[type="checkbox"] {
 
 p {
     margin: 0;
+    width: 75%;
+    text-align: left;
     font-size: 20px;
     font-weight: 200;
     color: #00204a;
@@ -92,7 +94,7 @@ input[type="text"]:focus {
     box-shadow: inset 0 -3px 0 0 #a683e3;
 }
 
-button {
+button.newAdd {
     min-height: 50px;
     width: 50px;
     border-radius: 50%;
@@ -112,3 +114,9 @@ footer{
     justify-content: center;
     color: rgba(0, 0, 0, 0.5);
 }
+
+.delete button{
+    border: none;
+    background: white;
+}
+
