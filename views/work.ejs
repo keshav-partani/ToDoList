@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles/style.css" />
+</head>
+    <title>ToDoList</title>
+</head>
+<header>
+    <div class="head">
+        <a href="/">
+            <div class="today">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar3" viewBox="0 0 16 16">
+                <path d="M14 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM1 3.857C1 3.384 1.448 3 2 3h12c.552 0 1 .384 1 .857v10.286c0 .473-.448.857-1 .857H2c-.552 0-1-.384-1-.857V3.857z"/>
+                <path d="M6.5 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2z">
+                </svg> 
+            Today
+        </a>
+    </div>
+        <a href="/work" style="margin-left: 10px;">
+            <div class="work">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-workspace" viewBox="0 0 16 16">
+                    <path d="M4 16s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H4Zm4-5.95a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"/>
+                    <path d="M2 1a2 2 0 0 0-2 2v9.5A1.5 1.5 0 0 0 1.5 14h.653a5.373 5.373 0 0 1 1.066-2H1V3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v9h-2.219c.554.654.89 1.373 1.066 2h.653a1.5 1.5 0 0 0 1.5-1.5V3a2 2 0 0 0-2-2H2Z"/>
+                </svg>
+            Work
+        </a>
+    </div>
+    </div>
+</header>
+<body>
+
+    <main>
+        <div class="box" id="heading">
+            <h1>
+                <%if(locals.moment){%>
+                    <%= moment().format('dddd, MMMM D'); %>
+                <%} else {%>
+                    TODAY
+                <%}%>
+            </h1>
+        </div>
+
+        <div class="box">
+            <%if(locals.data){%>
+                
+                <% data.forEach(function(data) { %>
+                    <form action="/workChecked" method="post">
+                        <div class="item">
+                            <% if (data.isComplete) { %>
+                                <input type="hidden" name="checkbox" value="<%= data._id %>" onclick="this.form.submit()">
+                                <input type="checkbox" id="mycheckbox" name="checkbox" checked="true" value="<%= data._id %>" onclick="this.form.  submit()">
+                            <% }else{ %>
+                                <input type="hidden" name="checkbox" value="<%= data._id %>" onclick="this.form.submit()">
+                                <input type="checkbox" id="mycheckbox" name="checkbox" value="<%= data._id %>" onclick="this.form.submit()">
+                            <% } %>
+                            
+                            <p>
+                                <%= data.title %>
+                            </p>
+                        </div>
+                    </form>
+                <% }); %>
+
+            <%} else {%>
+                <div class="item" style="justify-content: center;">
+                    <p>
+                        Error in loading
+                    </p>
+                </div>
+            <%}%>
+            
+              
+            <form class="item" action="/work" method="post">
+                <input type="text" name="newItem" placeholder="New Item" autocomplete="off" />
+                <button type="submit" name="list">+</button>
+            </form>
+                
+            </div>
+    </main>  
+</body>
+
+<footer>Copyright &copy; 2023</footer>
+
+</html>
