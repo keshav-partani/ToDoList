@@ -1,8 +1,23 @@
-Install all dependencies by using npm init
-Make sure node_modules folder is available
+1. Install all dependencies by using the following command:
+    npm init
+    Ensure that the node_modules folder is available in your project directory.
 
-for running this TODO project
+2. To run this TODO project, you have two options:
+    a) Using Node.js: 
+        node index.js
+    b) Using Nodemon for automatic code reloading:
+        nodemon index.js
 
-use -> 
-1) node index.js
-2) nodemon.inedx.js
+Project Features:
+
+1. All of your TODOs are saved in a database.
+
+2. The project includes a daily TODO feature that automatically deletes completed tasks at the end of the day.
+
+3. You can save TODOs in the work section, and these tasks won't be deleted automatically.
+
+4. You have the ability to create custom routes and save personal notes. These notes are not visible to anyone except you. To access these personal notes, you need to type the same URL again, like this:
+        http://localhost:4000/personal
+
+
+These instructions and features should help you properly set up and use your TODO project.
