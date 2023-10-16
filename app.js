@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 import lodash from "lodash";
 
 const app = express();
-const port = 4000;
+const port = 3000;
 const mongoURL = "mongodb://127.0.0.1:27017/toDoList";
 
 // Connection with mongodb localhost
